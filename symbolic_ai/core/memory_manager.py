@@ -5,7 +5,12 @@ from pathlib import Path
 class MemoryManager:
     """Manage symbolic memory as a small JSON based store."""
 
-    MEMORY_FILE = Path(__file__).resolve().parent.parent / "data" / "memory.json"
+    MEMORY_FILE = (
+        Path(__file__).resolve().parent.parent
+        / "data"
+        / "memory"
+        / "memory.json"
+    )
 
     def __init__(self):
         self.patterns = []
