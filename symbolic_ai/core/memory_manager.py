@@ -32,3 +32,10 @@ class MemoryManager:
 
     def all_symbols(self) -> list:
         return list(self.memory.keys())
+
+    def replay(self) -> list[dict]:
+        """Return all stored patterns in a flat list."""
+        patterns: list[dict] = []
+        for pats in self.memory.values():
+            patterns.extend(pats)
+        return patterns
