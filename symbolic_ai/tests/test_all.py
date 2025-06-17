@@ -1,49 +1,22 @@
-from ..core import symbolic_test_suite
-from ..vision import test_vision
-from ..audio import test_audio
-from ..web import test_web
-from ..cognition import test_cognition
-from ..creativity import test_creativity
-from ..tools import test_tools
+# symbolic_ai/tests/test_all.py
 
+import unittest
+import os
+import sys
 
-def test_self_check():
-    assert symbolic_test_suite.self_check()
+# Ensure project root is on sys.path
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..")))
 
+def discover_and_run_tests():
+    """Auto-discover and run all test_*.py files in symbolic_ai/."""
+    loader = unittest.TestLoader()
+    suite = loader.discover(start_dir="symbolic_ai", pattern="test_*.py")
 
-def test_vision_suite():
-    test_vision.test_train()
-    test_vision.test_identify()
-    test_vision.test_decode()
-    test_vision.test_live_reader()
+    print("🔍 Running all symbolic AI tests...\n")
+    runner = unittest.TextTestRunner(verbosity=2)
+    result = runner.run(suite)
+    if not result.wasSuccessful():
+        exit(1)
 
-
-def test_audio_suite():
-    test_audio.test_link()
-    test_audio.test_map()
-    test_audio.test_extract()
-
-
-def test_web_suite():
-    test_web.test_crawl()
-    test_web.test_learn()
-    test_web.test_query()
-
-
-def test_cognition_suite():
-    test_cognition.test_meaning()
-    test_cognition.test_discover()
-    test_cognition.test_emotion()
-
-
-def test_creativity_suite():
-    test_creativity.test_poet()
-    test_creativity.test_art()
-    test_creativity.test_language()
-
-
-def test_tools_suite():
-    test_tools.test_camera()
-    test_tools.test_browser()
-    test_tools.test_transcriber()
-    test_tools.test_font_downloader()
+if __name__ == "__main__":
+    discover_and_run_tests()
