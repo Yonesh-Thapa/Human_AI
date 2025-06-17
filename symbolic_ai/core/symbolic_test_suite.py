@@ -6,4 +6,4 @@ def self_check():
     mem = MemoryManager()
     brain = BrainController(mem)
     result = brain.run("b")
-    return mem.patterns and mem.patterns[-1] == result
+    return "b" in mem.memory and result in mem.memory["b"]

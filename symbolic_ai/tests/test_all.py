@@ -4,6 +4,8 @@ import unittest
 import os
 import sys
 
+print("🔍 Running all symbolic AI tests...\n")
+
 # Ensure project root is on sys.path
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..")))
 
@@ -12,7 +14,6 @@ def discover_and_run_tests():
     loader = unittest.TestLoader()
     suite = loader.discover(start_dir="symbolic_ai", pattern="test_*.py")
 
-    print("🔍 Running all symbolic AI tests...\n")
     runner = unittest.TextTestRunner(verbosity=2)
     result = runner.run(suite)
     if not result.wasSuccessful():

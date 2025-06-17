@@ -10,7 +10,8 @@ class TestCore(unittest.TestCase):
         mem = MemoryManager()
         brain = BrainController(mem)
         result = brain.run("c")
-        self.assertIn(result, mem.patterns)
+        self.assertIn("c", mem.all_symbols())
+        self.assertIn(result, mem.memory["c"])
 
 if __name__ == '__main__':
     unittest.main()

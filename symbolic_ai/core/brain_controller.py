@@ -1,16 +1,16 @@
-from .symbolic_evolver import SymbolicEvolver
-
-
 class BrainController:
-    """Main symbolic brain loop controller."""
+    """Main symbolic brain controller handling pattern creation."""
 
     def __init__(self, memory_manager: "MemoryManager"):
         self.memory = memory_manager
-        self.evolver = SymbolicEvolver()
 
-    def run(self, symbol: str = "a") -> str:
-        """Process ``symbol`` through the evolution pipeline and store it."""
-        evolved = self.evolver.evolve(symbol)
-        self.memory.add_pattern(evolved)
-        self.memory.prune()
-        return evolved
+    def run(self, input_letter: str) -> dict:
+        """Generate a basic pattern for ``input_letter`` and store it."""
+        shape = ord(input_letter)
+        pattern = {
+            "symbol": input_letter,
+            "ascii": shape,
+            "vector": [shape % 3, shape % 5, shape % 7],
+        }
+        self.memory.store(input_letter, pattern)
+        return pattern
