@@ -3,16 +3,14 @@ from symbolic_ai.core.memory_manager import MemoryManager
 
 
 def main():
-    """Run a simple demo processing a few letters."""
     memory = MemoryManager()
     brain = BrainController(memory)
 
+    for char in "abcABC123":
+        output = brain.run(char)
+        print(f"{char} => {output}")
 
-    for letter in "abc":
-        evolved = brain.run(letter)
-        print(f"{letter} -> {evolved}")
-
-    print("Stored patterns:", memory.patterns)
+    print("\U0001F4E6 Stored patterns:", memory.all_symbols())
 
 
 
