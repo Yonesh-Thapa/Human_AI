@@ -2,10 +2,12 @@ from symbolic_ai.core.brain_controller import BrainController
 from symbolic_ai.core.memory_manager import MemoryManager
 from symbolic_ai.audio.speech_to_letter import SpeechToLetter
 from symbolic_ai.vision.camera_reader import CameraReader
+from symbolic_ai.web.web_downloader import WebDownloader
 from symbolic_ai.logic.pattern_discoverer import PatternDiscoverer
 from symbolic_ai.logic.symbol_recognizer import SymbolRecognizer
 from symbolic_ai.logic.logic_chain import LogicChain
 from symbolic_ai.tools.live_debugger import Debugger
+from symbolic_ai.logging.logger import log
 from symbolic_ai.deepseek_interface import DeepSeekInterface
 
 
@@ -20,8 +22,10 @@ class LearningLoop:
         self.chain = LogicChain()
         self.camera = CameraReader()
         self.speech = SpeechToLetter()
+        self.web = WebDownloader()
         self.debugger = Debugger()
         self.deepseek = DeepSeekInterface()
+        self.log = log
         self.last_symbol: str | None = None
 
     def learn_symbol(self, symbol: str) -> dict:
@@ -55,31 +59,29 @@ class LearningLoop:
         """Continuously learn from the chosen source and log progress."""
         import time
 
+        url = "https://example.com"
         while True:
             if source == "camera":
                 symbols = [self.camera.read_letter()]
             elif source == "voice":
                 symbols = self.speech.listen()
             elif source == "web":
-                question = "Give me more symbols"
-                answer = self.deepseek.clarify(question)
-                symbols = [ch for ch in answer if ch.isalpha()]
+                text = self.web.fetch(url)
+                symbols = [ch for ch in text if ch.isalpha()]
             else:
-                self.debugger.log("Invalid source")
+                self.log("Invalid source")
                 return
 
             for sym in symbols:
+                known = self.recognizer.recognize(sym)
+                if not known:
+                    clue = self.deepseek.clarify(f"What is {sym}?")
+                    if clue:
+                        self.log(f"DeepSeek: {clue}")
                 info = self.learn_symbol(sym)
-                self.debugger.log(f"Learned {sym}: {info['pattern']}")
-
-            # ask deepseek for follow-up
-            if symbols:
-                ask = f"What should I know about {symbols[-1]}?"
-                response = self.deepseek.clarify(ask)
-                if response:
-                    self.debugger.log(f"DeepSeek says: {response}")
+                self.log(f"Found letter {sym}")
 
             sequence = [p["symbol"] for p in self.memory.replay()]
             self.chain.process(sequence)
-            self.debugger.update(f"Logic links: {len(self.chain.links)}")
+            self.log(f"Patterns stored: {len(sequence)}")
             time.sleep(1)
