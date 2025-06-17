@@ -18,10 +18,10 @@ class TestLogic(unittest.TestCase):
 
     def test_recognizer(self):
         mem = MemoryManager()
-        mem.memory = {"a": [{"ascii": 97, "vector": [1]}]}
+        mem.memory = {"a": [{"symbol": "a", "ascii": 97, "vector": [1]}]}
         recog = SymbolRecognizer(mem)
-        self.assertEqual(recog.recognize("a"), "a")
-        self.assertEqual(recog.recognize("b"), "a")
+        self.assertEqual(recog.recognize("a")["symbol"], "a")
+        self.assertEqual(recog.recognize("b")["symbol"], "a")
 
     def test_logic_chain(self):
         chain = LogicChain()
