@@ -1,5 +1,10 @@
 class VideoSpeechExtractor:
-    """Extracts speech from video."""
+    """Dummy extractor that returns raw bytes from provided content."""
 
-    def extract(self, video_url):
+    def extract(self, data: bytes | str) -> bytes:
+        """Return ``data`` as bytes, simulating extraction."""
+        if isinstance(data, bytes):
+            return data
+        if isinstance(data, str):
+            return data.encode("utf-8")
         return b""

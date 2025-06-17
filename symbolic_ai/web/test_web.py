@@ -1,16 +1,23 @@
+import unittest
+
 from .web_letter_crawler import WebLetterCrawler
 from .youtube_letter_learner import YouTubeLetterLearner
 from .deepseek_ai_connector import DeepSeekAIConnector
 
 
-def test_crawl():
-    crawler = WebLetterCrawler()
-    assert crawler.crawl('') == ''
+class TestWeb(unittest.TestCase):
+    def test_crawl(self):
+        crawler = WebLetterCrawler()
+        self.assertIn("hello", crawler.crawl("http://example.com/hello"))
 
-def test_learn():
-    learner = YouTubeLetterLearner()
-    assert learner.learn('')
+    def test_learn(self):
+        learner = YouTubeLetterLearner()
+        self.assertTrue(learner.learn("http://yt"))
 
-def test_query():
-    connector = DeepSeekAIConnector()
-    assert connector.query('hi') == 'response'
+    def test_query(self):
+        connector = DeepSeekAIConnector()
+        self.assertEqual(connector.query("hi"), "HI")
+
+
+if __name__ == "__main__":
+    unittest.main()
