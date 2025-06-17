@@ -1,6 +1,8 @@
 class SymbolicEvolver:
-    """Learns abstract structure and meaning from symbols."""
+    """Very small symbolic evolution engine."""
 
-    def evolve(self, symbol):
-        # Placeholder for evolution logic
-        return f"evolved_{symbol}"
+    def evolve(self, symbol: str) -> str:
+        """Return a transformed version of ``symbol`` used as a toy evolution."""
+        if not isinstance(symbol, str):
+            raise TypeError("symbol must be a string")
+        return symbol[::-1].upper()

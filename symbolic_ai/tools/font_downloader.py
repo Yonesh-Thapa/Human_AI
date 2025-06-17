@@ -1,5 +1,5 @@
 class FontDownloader:
-    """Fetches fonts dynamically."""
+    """Pretend to download fonts by validating the name."""
 
-    def download(self, name):
-        return True
+    def download(self, name: str) -> bool:
+        return bool(name)

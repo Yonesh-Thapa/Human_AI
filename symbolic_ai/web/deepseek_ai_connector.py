@@ -1,5 +1,5 @@
 class DeepSeekAIConnector:
-    """Queries LLMs for enrichment."""
+    """Mock connector returning uppercase responses."""
 
-    def query(self, text):
-        return "response"
+    def query(self, text: str) -> str:
+        return text.upper()

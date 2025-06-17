@@ -1,5 +1,5 @@
 class YouTubeLetterLearner:
-    """Scans videos for letter usage."""
+    """Pretend to learn letters from a YouTube URL."""
 
-    def learn(self, url):
-        return True
+    def learn(self, url: str) -> bool:
+        return url.startswith("http")
