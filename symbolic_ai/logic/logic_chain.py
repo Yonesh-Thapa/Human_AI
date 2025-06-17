@@ -1,8 +1,12 @@
+from typing import Optional
+
+
 class LogicChain:
     """Simple symbolic deduction chain."""
 
-    def __init__(self):
+    def __init__(self, memory: Optional["MemoryManager"] = None):
         self.links: dict[str, set[str]] = {}
+        self.memory = memory
 
     def add_link(self, a: str, b: str) -> None:
         self.links.setdefault(a, set()).add(b)
@@ -22,3 +26,8 @@ class LogicChain:
             return False
 
         return dfs(start)
+
+    def process(self, sequence: list[str]) -> None:
+        """Add links between each consecutive symbol in ``sequence``."""
+        for a, b in zip(sequence, sequence[1:]):
+            self.add_link(a, b)

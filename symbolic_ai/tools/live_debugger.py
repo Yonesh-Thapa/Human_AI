@@ -7,3 +7,13 @@ class LiveDebugger:
     def display(self) -> None:
         for symbol, patterns in self.memory.memory.items():
             print(f"{symbol}: {len(patterns)} patterns")
+
+
+class Debugger:
+    """Lightweight logger for the autonomous AI."""
+
+    def update(self, msg: str) -> None:
+        print(f"[UPDATE] {msg}")
+
+    def log(self, msg: str) -> None:
+        print(msg)
