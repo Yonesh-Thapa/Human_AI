@@ -1,38 +1,34 @@
 import json
-from pathlib import Path
+import os
+
+MEMORY_PATH = "symbolic_ai/data/memory/memory.json"
 
 
 class MemoryManager:
-    """Manage symbolic memory as a small JSON based store."""
-
-
-    MEMORY_FILE = (
-        Path(__file__).resolve().parent.parent
-        / "data"
-        / "memory"
-        / "memory.json"
-    )
-
+    """Store patterns for each symbol without duplication."""
 
     def __init__(self):
-        self.patterns = []
-        if self.MEMORY_FILE.exists():
-            try:
-                self.patterns = json.loads(self.MEMORY_FILE.read_text())
-            except Exception:
-                self.patterns = []
+        self.memory = self.load()
 
-    def add_pattern(self, pattern: str) -> None:
-        """Add a new symbolic pattern and persist it."""
-        self.patterns.append(pattern)
-        self._save()
+    def load(self) -> dict:
+        if os.path.exists(MEMORY_PATH):
+            with open(MEMORY_PATH, "r") as f:
+                data = json.load(f)
+                if isinstance(data, dict):
+                    return data
+        return {}
 
-    def prune(self, max_size: int = 10) -> None:
-        """Remove oldest patterns if memory exceeds ``max_size``."""
-        while len(self.patterns) > max_size:
-            self.patterns.pop(0)
-        self._save()
+    def store(self, symbol: str, pattern: dict) -> None:
+        if symbol not in self.memory:
+            self.memory[symbol] = []
+        if pattern not in self.memory[symbol]:
+            self.memory[symbol].append(pattern)
+        self.save()
 
-    def _save(self) -> None:
-        self.MEMORY_FILE.parent.mkdir(parents=True, exist_ok=True)
-        self.MEMORY_FILE.write_text(json.dumps(self.patterns))
+    def save(self) -> None:
+        os.makedirs(os.path.dirname(MEMORY_PATH), exist_ok=True)
+        with open(MEMORY_PATH, "w") as f:
+            json.dump(self.memory, f, indent=2)
+
+    def all_symbols(self) -> list:
+        return list(self.memory.keys())
