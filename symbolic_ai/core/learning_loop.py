@@ -5,6 +5,8 @@ from symbolic_ai.vision.camera_reader import CameraReader
 from symbolic_ai.logic.pattern_discoverer import PatternDiscoverer
 from symbolic_ai.logic.symbol_recognizer import SymbolRecognizer
 from symbolic_ai.logic.logic_chain import LogicChain
+from symbolic_ai.tools.live_debugger import Debugger
+from symbolic_ai.deepseek_interface import DeepSeekInterface
 
 
 class LearningLoop:
@@ -18,6 +20,8 @@ class LearningLoop:
         self.chain = LogicChain()
         self.camera = CameraReader()
         self.speech = SpeechToLetter()
+        self.debugger = Debugger()
+        self.deepseek = DeepSeekInterface()
         self.last_symbol: str | None = None
 
     def learn_symbol(self, symbol: str) -> dict:
@@ -46,3 +50,36 @@ class LearningLoop:
             if ch.isalpha() or ch.isdigit():
                 result = self.learn_symbol(ch)
         return result
+
+    def run_autonomous(self, source: str) -> None:
+        """Continuously learn from the chosen source and log progress."""
+        import time
+
+        while True:
+            if source == "camera":
+                symbols = [self.camera.read_letter()]
+            elif source == "voice":
+                symbols = self.speech.listen()
+            elif source == "web":
+                question = "Give me more symbols"
+                answer = self.deepseek.clarify(question)
+                symbols = [ch for ch in answer if ch.isalpha()]
+            else:
+                self.debugger.log("Invalid source")
+                return
+
+            for sym in symbols:
+                info = self.learn_symbol(sym)
+                self.debugger.log(f"Learned {sym}: {info['pattern']}")
+
+            # ask deepseek for follow-up
+            if symbols:
+                ask = f"What should I know about {symbols[-1]}?"
+                response = self.deepseek.clarify(ask)
+                if response:
+                    self.debugger.log(f"DeepSeek says: {response}")
+
+            sequence = [p["symbol"] for p in self.memory.replay()]
+            self.chain.process(sequence)
+            self.debugger.update(f"Logic links: {len(self.chain.links)}")
+            time.sleep(1)

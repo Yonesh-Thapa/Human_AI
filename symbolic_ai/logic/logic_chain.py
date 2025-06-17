@@ -31,3 +31,15 @@ class LogicChain:
         """Add links between each consecutive symbol in ``sequence``."""
         for a, b in zip(sequence, sequence[1:]):
             self.add_link(a, b)
+
+    def explain(self, start: str, depth: int = 3) -> list[str]:
+        """Return a reasoning chain starting from ``start`` up to ``depth`` steps."""
+        path = [start]
+        current = start
+        for _ in range(depth):
+            next_set = self.links.get(current)
+            if not next_set:
+                break
+            current = sorted(next_set)[0]
+            path.append(current)
+        return path
