@@ -17,3 +17,10 @@ class Debugger:
 
     def log(self, msg: str) -> None:
         print(msg)
+
+    def show_status(self, memory: "MemoryManager", next_goal: str | None = None) -> None:
+        """Display memory usage and upcoming goal."""
+        total = sum(len(p) for p in memory.memory.values())
+        print(f"[MEM] stored patterns: {total}")
+        if next_goal:
+            print(f"[NEXT] {next_goal}")
