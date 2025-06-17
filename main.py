@@ -7,11 +7,14 @@ def main():
     memory = MemoryManager()
     brain = BrainController(memory)
 
+
     for letter in "abc":
         evolved = brain.run(letter)
         print(f"{letter} -> {evolved}")
 
     print("Stored patterns:", memory.patterns)
+
+
 
 
 if __name__ == "__main__":
