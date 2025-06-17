@@ -1,5 +1,9 @@
-class WebLetterCrawler:
-    """Finds web content for letters."""
+from urllib.parse import urlparse
 
-    def crawl(self, url):
-        return ""
+
+class WebLetterCrawler:
+    """Extract words from a fake URL."""
+
+    def crawl(self, url: str) -> str:
+        path = urlparse(url).path
+        return path.strip("/")

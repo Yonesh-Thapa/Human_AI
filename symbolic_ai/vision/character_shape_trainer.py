@@ -1,6 +1,13 @@
 class CharacterShapeTrainer:
-    """Trains on fonts and styles."""
+    """Stores simple numeric patterns for letters."""
 
-    def train(self, image):
-        # Placeholder training logic
+    def __init__(self):
+        self.patterns: dict[str, int] = {}
+
+    def render_letter(self, letter: str) -> list[int]:
+        return [ord(letter)]
+
+    def train(self, image: list[int], letter: str = "?") -> bool:
+        pixels = sum(image)
+        self.patterns[letter] = pixels
         return True
